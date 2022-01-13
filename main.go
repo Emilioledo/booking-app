@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	var conferenceName string = "Go conference"
@@ -9,6 +12,7 @@ func main() {
 	var lastName string
 	var email string
 	var userTickets uint
+	bookings := []string{}
 	const conferenceTickets int = 50
 
 	fmt.Printf("Welcome to %v booking app \n", conferenceName)
@@ -17,20 +21,43 @@ func main() {
 
 	fmt.Println("Get your tickets here to attend")
 
-	fmt.Println("Enter your first name:")
-	fmt.Scan(&firstName)
+	for {
+		fmt.Println("Enter your first name:")
+		fmt.Scan(&firstName)
 
-	fmt.Println("Enter your last name:")
-	fmt.Scan(&lastName)
+		fmt.Println("Enter your last name:")
+		fmt.Scan(&lastName)
 
-	fmt.Println("Enter your email adress:")
-	fmt.Scan(&email)
+		fmt.Println("Enter your email adress:")
+		fmt.Scan(&email)
 
-	fmt.Println("Enter numbers of tickets:")
-	fmt.Scan(&userTickets)
+		fmt.Println("Enter numbers of tickets:")
+		fmt.Scan(&userTickets)
 
-	remainingTickets = remainingTickets - userTickets
+		if userTickets <= remainingTickets {
+			remainingTickets = remainingTickets - userTickets
+			bookings = append(bookings, firstName+" "+lastName)
 
-	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v \n", firstName, lastName, userTickets, email)
-	fmt.Printf("%v tickets remaining for %v \n", remainingTickets, conferenceName)
+			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v \n", firstName, lastName, userTickets, email)
+			fmt.Printf("%v tickets remaining for %v \n", remainingTickets, conferenceName)
+
+			firstNames := []string{}
+
+			for _, booking := range bookings {
+				var names = strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+
+			fmt.Printf("The first name of bookings are: %v \n", firstNames)
+
+			if remainingTickets == 0 {
+				fmt.Println("Our conference is booked out. Come back next year.")
+				break
+			}
+
+		} else {
+			fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets \n", remainingTickets, userTickets)
+			continue
+		}
+	}
 }
